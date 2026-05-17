@@ -92,6 +92,22 @@ The lab simulates a small enterprise environment with Windows systems, domain se
 
 ---
 
+## Active Directory Security Analysis
+
+BloodHound was used to identify:
+
+- Kerberoastable accounts
+- Privilege escalation paths
+- Tier 0 assets
+- Organizational Units and AD object relationships
+
+Key findings:
+- Service account exposure
+- Privileged group attack paths
+- Identity attack surface visibility
+
+---
+
 ## Project Status
 
 🚧 In progress — continuously updated with new attack simulations, detections, hardening tasks, and automation scripts.
