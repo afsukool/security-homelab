@@ -15,36 +15,34 @@ A production-grade cyber security research lab simulating multi-stage Active Dir
 
 ## 🏗️ Lab Architecture & Attack Surface
 
-
-
 ```
-[ Isolated CORP.LOCAL Domain ]
-│
-┌────────────────────────────┼────────────────────────────┐
-▼                            ▼                            ▼
-┌──────────────┐             ┌──────────────┐             ┌──────────────┐
-│ KALI LINUX   │             │ WIN10-CLIENT │             │ DC01 (2019)  │
-│ 192.168.56.30│             │ 192.168.56.20│             │ 192.168.56.10│
-│ (Attacker)   │             │ (Victim Host)│             │ (Active Dir.)│
-└──────┬───────┘             └──────┬───────┘             └──────┬───────┘
-│                            │                            │
-│ Enacts Exploitation        │ Forwards Telemetry Data     │
-└───────────────────────────►┼◄───────────────────────────┘
-│
-▼
-┌──────────────────────────────┐
-│ UBUNTU SPLUNK SERVER         │
-│ 192.168.56.40                │
-│ (Central Log Engine)         │
-└──────────────────────────────┘
+                         [ Isolated CORP.LOCAL Domain ]
+                                      │
+          ┌───────────────────────────┼───────────────────────────┐
+          ▼                           ▼                           ▼
+  ┌──────────────┐            ┌──────────────┐            ┌──────────────┐
+  │ KALI LINUX   │            │ WIN10-CLIENT │            │ DC01 (2019)  │
+  │ 192.168.56.30│            │ 192.168.56.20│            │ 192.168.56.10│
+  │ (Attacker)   │            │ (Victim Host)│            │ (Active Dir.)│
+  └──────┬───────┘            └──────┬───────┘            └──────┬───────┘
+         │                           │                           │
+         │ Enacts Exploitation       │ Forwards Telemetry Data   │
+         └──────────────────────────►┼◄──────────────────────────┘
+                                      │
+                                      ▼
+                       ┌──────────────────────────────┐
+                       │ UBUNTU SPLUNK SERVER         │
+                       │ 192.168.56.40                │
+                       │ (Central Log Engine)         │
+                       └──────────────────────────────┘
 ```
 
 | Machine | OS | IP | Role |
 |---|---|---|---|
-| DC01 | Windows Server 2019 | 192.168.56.10 | Domain Controller, DNS, Kerberos KDC |
-| WIN10-CLIENT | Windows 10 | 192.168.56.20 | Domain-joined victim endpoint |
-| SPLUNKSERVER | Ubuntu 22.04 | 192.168.56.40 | Splunk Enterprise SIEM |
-| KALI | Kali Linux 2024 | 192.168.56.30 | Attacker — Impacket, BloodHound |
+| **DC01** | Windows Server 2019 | 192.168.56.10 | Domain Controller, DNS, Kerberos KDC |
+| **WIN10-CLIENT** | Windows 10 | 192.168.56.20 | Domain-joined victim endpoint |
+| **SPLUNKSERVER** | Ubuntu 22.04 | 192.168.56.40 | Splunk Enterprise SIEM |
+| **KALI** | Kali Linux 2024 | 192.168.56.30 | Attacker — Impacket, BloodHound |
 
 ---
 
@@ -71,7 +69,7 @@ SMB-based credential guessing against multiple domain accounts, paced below lock
 
 **Detection:** Splunk alert on `EventCode=4625` — multiple failed logons from a single source IP across multiple accounts within a short time window.
 
-```spl
+```text
 index=windows EventCode=4625
 | bucket span=5m _time
 | stats dc(user) as unique_users count by _time, src_ip
@@ -87,9 +85,8 @@ SPN-enabled service account (`SQLSVC`) targeted with Impacket's `GetUserSPNs.py`
 
 **Detection:** Splunk alert on `EventCode=4769` with `Ticket_Encryption_Type=0x17` (RC4-HMAC).
 
-```spl
-index=windows EventCode=4769
-Ticket_Encryption_Type=0x17 NOT Service_Name="*$"
+```text
+index=windows EventCode=4769 Ticket_Encryption_Type=0x17 NOT Service_Name="*$"
 | stats count by src_ip, Service_Name, Account_Name
 | where count > 2
 | sort -count
@@ -117,10 +114,9 @@ Encoded PowerShell commands (`-EncodedCommand`, `IEX`, Base64 payloads) simulati
 
 **Detection:**
 
-```spl
+```text
 index=sysmon EventCode=1 Image="*powershell.exe"
-| search CommandLine="*-enc*" OR CommandLine="*IEX*"
-  OR CommandLine="*DownloadString*"
+| search CommandLine="*-enc*" OR CommandLine="*IEX*" OR CommandLine="*DownloadString*"
 | table _time, User, ParentImage, CommandLine
 ```
 
@@ -217,6 +213,6 @@ security-home-lab/
 
 ## Author
 
-**Afsar Kuttiyassan**  
-Cybersecurity / SOC Analyst  
+**Afsar Kuttiyassan**
+Cybersecurity / SOC Analyst
 *This lab is a portfolio project demonstrating practical skills in enterprise security monitoring, Active Directory security, and detection engineering.*
