@@ -1,9 +1,9 @@
 # 🛡️ Enterprise Active Directory Security Lab & Offensive Emulation
 
-[![CPENT Aligned](https://shields.io)](https://eccouncil.org)
-[![SIEM Platform](https://shields.io)](https://splunk.com)
-[![Lab Environment](https://shields.io)]()
-[![Target Location](https://shields.io)]()
+[![CPENT Aligned](https://img.shields.io/badge/CPENT-Aligned-blue)](https://www.eccouncil.org/train-certify/certified-penetration-testing-professional-cpent/)
+[![SIEM Platform](https://img.shields.io/badge/SIEM-Splunk-black?logo=splunk)](https://www.splunk.com/)
+[![Lab Environment](https://img.shields.io/badge/Environment-VirtualBox%20Lab-success)]()
+[![Target Location](https://img.shields.io/badge/Scope-CORP.LOCAL-orange)]()
 
 A production-grade cyber security research lab simulating multi-stage Active Directory enterprise exploitation and defensive engineering. This project documents end-to-end attack chains—from initial access vector execution to low-level Windows telemetry collection and SIEM alert validation.
 
