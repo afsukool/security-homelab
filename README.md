@@ -1,38 +1,42 @@
-# 🛡️ Enterprise Active Directory Security Lab
+# 🛡️ Enterprise Active Directory Security Lab & Offensive Emulation
 
-![Status](https://img.shields.io/badge/Status-Active-brightgreen)
-![Domain](https://img.shields.io/badge/Domain-CORP.LOCAL-blue)
-![SIEM](https://img.shields.io/badge/SIEM-Splunk%20Enterprise-orange)
-![Platform](https://img.shields.io/badge/Platform-Windows%20Server%202019-0078D4?logo=windows)
-![Attacker](https://img.shields.io/badge/Attacker-Kali%20Linux-557C94?logo=kali-linux)
+[![CPENT Aligned](https://shields.io)](https://eccouncil.org)
+[![SIEM Platform](https://shields.io)](https://splunk.com)
+[![Lab Environment](https://shields.io)]()
+[![Target Location](https://shields.io)]()
 
-A hands-on enterprise-grade cybersecurity lab simulating real-world Active Directory attack and defence scenarios. Built to develop and demonstrate practical skills in SOC analysis, detection engineering, and incident response.
+A production-grade cyber security research lab simulating multi-stage Active Directory enterprise exploitation and defensive engineering. This project documents end-to-end attack chains—from initial access vector execution to low-level Windows telemetry collection and SIEM alert validation.
 
-> 📄 **[Full SOC Incident Report →](docs/Afsar_Kuttiyassan_SOC_Incident_Report.pdf)**  
-> Documents a complete multi-stage AD attack simulation with MITRE ATT&CK mapping, Splunk detections, and BloodHound analysis.
+## 📄 Core Deliverables & Portfolios
+* 📘 **[Download Full SOC Incident Report](./docs/Afsar_Kuttiyassan_SOC_Incident_Report.pdf):** A comprehensive, enterprise-ready intelligence report containing structured attack analysis, cryptographic breakdowns, and root-cause analysis.
+* 🛡️ **[Production Hardening Strategies](#active-directory-hardening):** Complete technical breakdown of tiering infrastructure and GPO implementations used to shut down lateral movement.
 
 ---
 
-## Lab Architecture
+## 🏗️ Lab Architecture & Attack Surface
+
+
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        CORP.LOCAL Domain                        │
-│                                                                 │
-│  ┌──────────────────┐        ┌──────────────────────────────┐  │
-│  │  DC01            │        │  WIN10-CLIENT                │  │
-│  │  192.168.56.10   │◄──────►│  192.168.56.20               │  │
-│  │  Windows Server  │        │  Domain-joined Workstation   │  │
-│  │  2019 (DC/DNS/   │        └──────────────────────────────┘  │
-│  │  Kerberos/LDAP)  │                                           │
-│  └──────────────────┘        ┌──────────────────────────────┐  │
-│                               │  SPLUNKSERVER                │  │
-│  ┌──────────────────┐        │  192.168.56.40               │  │
-│  │  KALI            │        │  Ubuntu — Splunk Enterprise  │  │
-│  │  192.168.56.30   │───────►│  (SIEM, log aggregation)     │  │
-│  │  Attacker Host   │        └──────────────────────────────┘  │
-│  └──────────────────┘                                           │
-└─────────────────────────────────────────────────────────────────┘
+[ Isolated CORP.LOCAL Domain ]
+│
+┌────────────────────────────┼────────────────────────────┐
+▼                            ▼                            ▼
+┌──────────────┐             ┌──────────────┐             ┌──────────────┐
+│ KALI LINUX   │             │ WIN10-CLIENT │             │ DC01 (2019)  │
+│ 192.168.56.30│             │ 192.168.56.20│             │ 192.168.56.10│
+│ (Attacker)   │             │ (Victim Host)│             │ (Active Dir.)│
+└──────┬───────┘             └──────┬───────┘             └──────┬───────┘
+│                            │                            │
+│ Enacts Exploitation        │ Forwards Telemetry Data     │
+└───────────────────────────►┼◄───────────────────────────┘
+│
+▼
+┌──────────────────────────────┐
+│ UBUNTU SPLUNK SERVER         │
+│ 192.168.56.40                │
+│ (Central Log Engine)         │
+└──────────────────────────────┘
 ```
 
 | Machine | OS | IP | Role |
